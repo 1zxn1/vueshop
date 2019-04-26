@@ -18,6 +18,7 @@
           :style="{width:isshow?'65px':'200px'}"
           :collapse="isshow"
           :collapse-transition="false"
+          :router="true"
         >
           <el-submenu :index="k+''" v-for="(item,k) in menuList" :key="item.id">
             <template slot="title">
@@ -25,11 +26,7 @@
               <span>{{item.authName}}</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item
-                :index="item.id+'-'+item2.id"
-                v-for="item2 in item.children"
-                :key="item2.id"
-              >
+              <el-menu-item :index="item2.path" v-for="item2 in item.children" :key="item2.id">
                 <i class="el-icon-menu"></i>
                 <span>{{item2.authName}}</span>
               </el-menu-item>
@@ -52,14 +49,14 @@ export default {
   methods: {
     async getMenuList() {
       const { data: dt } = await this.$http.get('/menus')
-      console.log(dt)
+      // console.log(dt)
       if (dt.meta.status !== 200) {
         return this.$message.error(dt.meta.msg)
       }
       this.menuList = dt.data
     },
     logoout() {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+      this.$confirm('此操作将退出后台管理系统, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -112,6 +109,12 @@ export default {
   .el-aside {
     background-color: #333744;
     .el-menu {
+      i.iconfont {
+        margin-right: 10px;
+      }
+      span {
+        font-size: 13px;
+      }
       .el-menu-item {
         font-size: 13px;
       }
